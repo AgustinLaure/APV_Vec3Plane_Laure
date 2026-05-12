@@ -1,7 +1,5 @@
 using CustomMath;
 using System;
-using Unity.VisualScripting;
-using UnityEngine;
 
 public struct MyPlane : IEquatable<MyPlane>
 {
@@ -9,9 +7,11 @@ public struct MyPlane : IEquatable<MyPlane>
     private float distance;
     private Vec3 normal;
 
-    public readonly MyPlane flipped //duda
+    public float Distance { get { return distance; } }
+    public Vec3 Normal { get { return normal; } }
+    public readonly MyPlane flipped 
     {
-        get { return new MyPlane(-normal, -distance); }
+        get { return new MyPlane(-normal, distance); }
     }
     #endregion
 
@@ -22,28 +22,11 @@ public struct MyPlane : IEquatable<MyPlane>
         this.normal = inNormal.normalized;
         this.distance = Vec3.Dot(this.normal, inPoint);
     }
+
     public MyPlane(Vec3 inNormal, float d)
     {
-        /*
-        //con inNormal normalizada
         this.distance = d;
-        this.normal = inNormal;
-        */
-
-        //sin
-
-        float vecMagnitude = inNormal.magnitude;
-
-        if (vecMagnitude < epsilon)
-        {
-            this.distance = 0;
-            this.normal = Vec3.Zero;
-
-            return;
-        }
-
-        this.distance = d / vecMagnitude;
-        this.normal = new Vec3(inNormal.x / vecMagnitude, inNormal.y / vecMagnitude, inNormal.z / vecMagnitude);
+        this.normal = inNormal.normalized;
     }
 
     public MyPlane(Vec3 a, Vec3 b, Vec3 c)
@@ -83,34 +66,29 @@ public struct MyPlane : IEquatable<MyPlane>
         return point + normal * (distance - Vec3.Dot(point, normal));
     }
 
-    public override bool Equals(object other) // revisar
+    public override bool Equals(object other) 
     {
-        if (!(other is MyPlane)) return false;
+        if (!(other is MyPlane))
+        {
+            return false;
+        }
+
         return Equals((MyPlane)other);
     }
 
-    public bool Equals(MyPlane other) // r
+    public bool Equals(MyPlane other) 
     {
-        /*
-        return normal.x == other.normal.x && normal.y == other.normal.y && normal.z == other.normal.z && distance == other.distance;
-        */
-
         return this == other;
     }
 
-    public override int GetHashCode() // r
+    public override int GetHashCode() 
     {
         return HashCode.Combine(normal, distance);
-
-        /*
-        return normal.GetHashCode() ^ (distance.GetHashCode() << 2);
-        */
     }
 
     public void Flip()
     {
         normal = -normal;
-        distance = -distance;
     }
 
     public float GetDistanceToPoint(Vec3 point)
@@ -147,7 +125,7 @@ public struct MyPlane : IEquatable<MyPlane>
 
     public override string ToString()
     {
-        return "Normal: " + normal.ToString() + "    Distance = " + distance.ToString();
+        return "(normal:" + normal.ToString() + ", " + "distance:" + distance.ToString("F2") + ")";
     }
     #endregion
 }

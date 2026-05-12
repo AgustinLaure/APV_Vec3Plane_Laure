@@ -1,5 +1,6 @@
 using CustomMath;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.UIElements;
 
 public class Debugger : MonoBehaviour
@@ -13,8 +14,21 @@ public class Debugger : MonoBehaviour
     bool unityVecBool;
     bool myVecBool;
 
+    private Plane unityPlane;
+    private MyPlane myPlane;
+
+    private Vector3 unityPlaneVec;
+    private Vec3 myPlaneVec;
+
+    private float unityPlaneFloat;
+    private float myPlaneFloat;
+
+    private bool unityPlaneBool;
+    private bool myPlaneBool;
+
     private void Awake()
     {
+        /*
         ResetVecs();
         PrintLogs("new");
 
@@ -248,9 +262,133 @@ public class Debugger : MonoBehaviour
         unityVecBool = unityVec.GetHashCode() == new Vector3(10f,5f,1f).GetHashCode();
         myVecBool = myVec.GetHashCode() == new Vec3(10f, 5f, 1f).GetHashCode();
         PrintLogs("both must be false");
+        */
+
+        ResetPlanes();
+        
+        ResetPlanes();
+        unityPlane = unityPlane.flipped;
+        myPlane = myPlane.flipped;
+        PrintPlaneLogs("flip");
+
+        ResetPlanes();
+        unityPlane = new Plane(new Vector3(1f,3f,5f), new Vector3(10f,2f,3f));
+        myPlane = new MyPlane(new Vec3(1f,3f,5f), new Vec3(10f,2f,3f));
+        PrintPlaneLogs("inNormal inpoint");
+
+        ResetPlanes();
+        unityPlane = new Plane(new Vector3(1f, 3f, 5f), 10f);
+        myPlane = new MyPlane(new Vec3(1f, 3f, 5f), 10f);
+        PrintPlaneLogs("inNormal y d");
+
+        ResetPlanes();
+        unityPlane = new Plane(new Vector3(5f,2f,3f), new Vector3(9f,10f,8f), new Vector3(10f,2f,1f));
+        myPlane = new MyPlane(new Vec3(5f,2f,3f), new Vec3(9f,10f,8f), new Vec3(10f,2f,1f));
+        PrintPlaneLogs("3 points");
+
+        ResetPlanes();
+        unityPlaneBool = myPlane == new MyPlane(new Vec3(), new Vec3());
+        myPlaneBool = myPlane == new MyPlane(new Vec3(1f, 2f, 3f), 10f);
+        PrintPlaneLogs("myplanE BOOL must be false and unity bool must be true");
+
+        ResetPlanes();
+        myPlaneBool = myPlane != new MyPlane(new Vec3(1f, 2f, 2f), 10f);
+        PrintPlaneLogs("!= my plane bool must be true");
+
+        ResetPlanes();
+        unityPlane = Plane.Translate(unityPlane, new Vector3(1f,5f,7f));
+        myPlane = MyPlane.Translate(myPlane, new Vec3(1f,5f,7f));
+        PrintPlaneLogs("translate");
+
+        ResetPlanes();
+        unityPlaneVec = unityPlane.ClosestPointOnPlane(new Vector3(2f,3f,1f));
+        myPlaneVec = myPlane.ClosestPointOnPlane(new Vec3(2f,3f,1f));
+        PrintPlaneLogs("closest point on plane");
+
+        ResetPlanes();
+        myPlaneBool = myPlane.Equals(new Vec3(2f, 3f, 1f));
+        PrintPlaneLogs("myPlaneBool  must be false");
+
+        ResetPlanes();
+        myPlaneBool = myPlane.Equals(new MyPlane(new Vec3(1f, 2f, 3f), 10f));
+        PrintPlaneLogs("myPlaneBool must be true");
+
+        ResetPlanes();
+        unityPlaneFloat = unityPlane.GetHashCode();
+        myPlaneFloat = myPlane.GetHashCode();
+        PrintPlaneLogs("HASH CODE");
+
+        ResetPlanes();
+        unityPlane.Flip();
+        myPlane.Flip();
+        PrintPlaneLogs("flip");
+
+        ResetPlanes();
+        unityPlaneFloat = unityPlane.GetDistanceToPoint(new Vector3(1f,2f,3f));
+        myPlaneFloat = myPlane.GetDistanceToPoint(new Vec3(1f,2f,3f));
+        PrintPlaneLogs("distance to point");
+
+        ResetPlanes();
+        unityPlaneBool = unityPlane.GetSide(new Vector3(2f,3f,1f));
+        myPlaneBool = myPlane.GetSide(new Vec3(2f,3f,1f));
+        PrintPlaneLogs("get side");
+
+        ResetPlanes();
+        unityPlaneBool = unityPlane.SameSide(new Vector3(2f, 3f, 1f), new Vector3(3f,1f,2f));
+        myPlaneBool = myPlane.SameSide(new Vec3(2f, 3f, 1f), new Vec3(3f,1f,2f));
+        PrintPlaneLogs("same side");
+
+        ResetPlanes();
+        unityPlane.Set3Points(new Vector3(1f,3f,2f), new Vector3(2f,1f,3f), new Vector3(9f,1f,2f));
+        myPlane.Set3Points(new Vec3(1f,3f,2f), new Vec3(2f,1f,3f), new Vec3(9f,1f,2f));
+        PrintPlaneLogs("set 3 points");
+
+        ResetPlanes();
+        unityPlane.SetNormalAndPosition(new Vector3(9f,2f,1f), new Vector3(6f,3f,3f));
+        myPlane.SetNormalAndPosition(new Vec3(9f,2f,1f), new Vec3(6f,3f,3f));
+        PrintPlaneLogs("set normal andp ositions");
+
+        ResetPlanes();
+        unityPlane.Translate(new Vector3(9f,2,1f));
+        myPlane.Translate(new Vec3(9f,2,1f));
+        PrintPlaneLogs("translate");
+    }
+    
+    private void ResetPlanes()
+    {
+        unityPlane = new Plane(new Vector3(1f,2f,3f), -10f);
+        myPlane = new MyPlane(new Vec3(1f,2f,3f), 10f);
+
+        unityPlaneVec = Vec3.Zero;
+        myPlaneVec = Vec3.Zero;
+
+        myPlaneFloat = 0f;
+        unityPlaneFloat = 0f;
+
+        unityPlaneBool = false;
+        myPlaneBool = false;
     }
 
-    private void PrintLogs(string title)
+    private void PrintPlaneLogs(string title)
+    {
+        Debug.Log("START  " + title);
+
+        Debug.Log("Unity plane values: " + unityPlane.ToString());
+        Debug.Log("My plane values: " + myPlane.ToString());
+
+        Debug.Log("Unity plane vec: " + unityPlaneVec);
+        Debug.Log("My plane vec: " + myPlaneVec);
+
+        Debug.Log("Unity plane float: " + unityPlaneFloat);
+        Debug.Log("My plane float: " + myPlaneFloat);
+
+        Debug.Log("Unity plane bool: " + unityPlaneBool);
+        Debug.Log("My plane bool: " + myPlaneBool);
+
+        Debug.Log("END  " + title);
+    }
+
+    private void PrintVecLogs(string title)
     {
         Debug.Log("START  "  + title);
         Debug.Log("Unity vec values: " + unityVec);

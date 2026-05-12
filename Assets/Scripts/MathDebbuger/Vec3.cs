@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace CustomMath
 {
-
     public struct Vec3 : IEquatable<Vec3>
     {
         public float x;

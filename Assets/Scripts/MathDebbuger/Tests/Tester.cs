@@ -46,5 +46,4 @@ public class Tester : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
         }
     }
-
 }
