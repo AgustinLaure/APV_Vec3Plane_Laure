@@ -98,7 +98,7 @@ public struct MyPlane : IEquatable<MyPlane>
 
     public bool GetSide(Vec3 point)
     {
-        return Vec3.Dot(point, normal) > distance;
+        return Vec3.Dot(point, normal) >= distance;
     }
 
     public bool SameSide(Vec3 inPt0, Vec3 inPt1)
