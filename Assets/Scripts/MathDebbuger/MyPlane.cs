@@ -93,7 +93,7 @@ public struct MyPlane : IEquatable<MyPlane>
 
     public float GetDistanceToPoint(Vec3 point)
     {
-        return distance - Vec3.Dot(point, normal);
+        return Vec3.Dot(point, normal) - distance;
     }
 
     public bool GetSide(Vec3 point)
